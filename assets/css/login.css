@@ -1,0 +1,97 @@
+.intro__inner_login {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+.container{
+    margin-top: 50px;
+}
+.header_inner{
+    text-align: center;
+}
+.nav{
+    text-align: center;
+    margin: 0 auto;
+}
+
+.titleintro{
+    text-align: center;
+    font-size: 36px;
+    margin-top: 20px;
+}
+
+.login{
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+}
+h2 {
+    text-align: center;
+    color: #333;
+    padding: 20px;
+}
+
+label {
+    color: #333;
+    font-size: 30px;
+}
+
+#Uname {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 3px;
+    padding-left: 8px;
+}
+
+#Pass {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 3px;
+    padding-left: 8px;
+
+}
+#log {
+    width: 300px;
+    height: 40px;
+    border: none;
+    border-radius: 3px;
+    padding-left: 7px;
+    color: #333;
+}
+
+.fasf{
+    font-size: 14px;
+    color: black;
+    text-decoration: none;
+}
+.fasf:hover{
+    text-decoration: underline;
+
+}
+.remember__me {
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+}
+
+.login__btn{
+    display: inline-block;
+    vertical-align: top;
+    padding: 5px 35px;
+
+    color: black;
+    font-size: 14px;
+    font-weight: 700; 
+    background-color: rgb(255, 145, 106);
+    transition: background .1s linear, color .1s linear;
+    text-decoration: none;
+
+    margin-top: 5px;
+}
+.login__btn:hover{
+    color: white;
+    background-color: brown;
+}
