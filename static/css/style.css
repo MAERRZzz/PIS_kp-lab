@@ -1,0 +1,13 @@
+.d-block, .nav{
+    font-size: 18px;
+    border: None;
+    background-color: white;
+    transition: background 0.3s;
+    }
+.pages{
+    padding-right: 5px;
+}
+
+.d-block:hover, .nav-link:hover {
+    background-color: rgb(217, 217, 217);
+}

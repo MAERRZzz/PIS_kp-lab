@@ -1,0 +1,127 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+    <style>
+      h1{
+        text-align: center;
+        padding-top:100px
+      }
+    </style>
+</head>
+<body>
+{% extends "base.html" %}
+{% block body %}
+<div class="d-grid gap-3" style="grid-template-columns: 1fr 3fr; padding-left: 65px; padding-right: 65px; position: sticky; ">
+  <div class="bg-light border rounded-3" style="width: 325px; height: 550px; text-align: center">
+    <br><br>Сортировка<br><br>
+  </div>
+
+<style>
+        .product-item {
+           max-width: 350px;
+           margin: 0 auto;
+           padding: 10px 10px 10px 10px;
+           border: 1.5px solid #eee;
+           background: white;
+           font-family: "Open Sans";
+           overflow: hidden;
+           transition: .4s linear;
+        }
+        .product-img {
+           transition: 0.3s ease-in-out;
+        }
+        .product-img:hover {
+           transform: scale(1.03);
+        }
+        .product-img img {
+            height: 270px;
+            max-width: 100%;
+            width: auto;
+        }
+        .product-list {
+           margin-top: 15px;
+        }
+        .product-list h3 {
+           font-weight: 700;
+           color: #39404B;
+           margin: 0;
+           text-transform: uppercase;
+           font-size: 14px;
+           line-height: 2;
+        }
+        .price {
+           color: #E34D38;
+           display: block;
+           margin-bottom: 12px;
+        }
+        .stars {
+           height: 14px;
+           line-height: 14px;
+           margin: 7px 0;
+        }
+        .actions {
+           justify-content: center;
+           border-top: 1px solid #eee;
+           padding-top: 4px;
+           font-size: 13px;
+           height: 30px;
+           line-height: 30px;
+        }
+        .actions:after {
+           content: "";
+           display: table;
+           clear: both;
+        }
+        .add-to-cart, .add-to-links {
+           float: center;
+        }
+        .button {
+           text-decoration: none;
+           display: inline-block;
+           padding: 0 25px;
+           background: #cccccc;
+           color: white;
+           text-transform: uppercase;
+           font-size: 12px;
+           line-height: 28px;
+           transition: .3s ease-in;
+
+        }
+        .button:hover {
+           background: #fc5a5a;
+           color: white;
+        }
+          </style>
+
+
+  <div class="bg-light border rounded-3 p-3">
+<!-- СПИСОК ТОВАРОВ  -->
+      <div class="row">
+          {%for phone in phone%}
+          <div class="phone_card col-6 col-sm-6 col-md-4">
+              <div class="product-item" style="text-align: center; border-radius: 10px">
+                  <div class="product-img">
+                      <a href="/details/{{phone.id}}">
+                          <img src="{{phone.image}}">
+                      </a>
+                  </div>
+                  <div class="product-list">
+                      <h3>{{phone.brand}} {{phone.model}}</h3>
+                      <span class="price">₽ {{phone.price}}</span>
+                      <div class="actions">
+                          <div class="add-to-cart">
+                              <a href="" class="button">В корзину</a>
+                          </div>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {%endfor%}
+      </div>
+  </div>
+</div>{% endblock %}
+</body>
+
+</html>

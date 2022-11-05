@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/details.css')}}">
+    <title>{{page_title.brand}} {{page_title.model}}</title>
+    <style>
+      h1{
+        text-align: center;
+        padding-top:100px;
+      }
+    </style>
+</head>
+
+<body>
+{% extends "base.html" %}
+{% block body %}
+{%for phone in phone%}
+
+  <!-- Left Column / Headphones Image -->
+<div class="box">
+<div class="left-column">
+    <img data-image="black" src="images/black.png" alt="">
+    <img data-image="blue" src="images/blue.png" alt="">
+    <img data-image="red" class="active" src="{{phone.image}}" alt="">
+  </div>
+
+  <!-- Right Column -->
+  <div class="right-column">
+
+    <!-- Product Description -->
+    <div class="product-description">
+      <h5><b>{{phone.brand}} {{phone.model}}</b></h5>
+      <h5 style="font-size: 34; margin-top: -5px;   letter-spacing: 1px;">
+        ({{phone.color_title}})</h5>
+      <div class="characteristics" style="font-size: 18;   font-weight: 380;">
+        <div class="text" style="margin-top: -20px; margin-bottom: 10px;">
+          <br>Операционная система: {{phone.OS}}
+          <br>Год выпуска: {{phone.year}}
+          <br>Диагональ экрана (дюйм): {{phone.diagonal}}
+          <br>Кол-во ядер: {{phone.cores}}
+          <br>Оперативная память: {{phone.RAM}}
+          <br>Встроенная память: {{phone.diagonal}}
+          <br>Кол-во SIM-карт: {{phone.SIM}}
+          <br>NFC: {{phone.NFC}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Configuration -->
+    <div class="product-configuration">
+
+      <!-- Product Color -->
+      <div class="product-color">
+        <span style="font-size: 20; margin-top: -5px">Цвет</span>
+
+        <div class="color-choose">
+          <div>
+            <input data-image="red" type="radio" id="red" name="color" value="red" checked>
+            <label for="red"><span></span></label>
+          </div>
+          <div>
+            <input data-image="blue" type="radio" id="blue" name="color" value="blue">
+            <label for="blue"><span></span></label>
+          </div>
+          <div>
+            <input data-image="black" type="radio" id="black" name="color" value="black">
+            <label for="black"><span></span></label>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Product Pricing -->
+    <div class="product-price">
+      <span>₽ {{phone.price}}</span>
+      <a href="#" class="cart-btn">В корзину</a>
+    </div>
+  </div>
+  </div>
+{%endfor%}
+
+{% endblock %}</body>
