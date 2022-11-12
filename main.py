@@ -43,9 +43,9 @@ def check_user():
 
     if 'admin' in session and session.get('logged_in'):
         if session['admin']:
-            return render_template('home.html', msg=session['first_name'])
+            return render_template('home.html')
         else:
-            return render_template('home2.html', msg=session['first_name'], user_session=session.get('logged_in'), phone=phone)
+            return render_template('home2.html', user_session=session.get('logged_in'), phone=phone)
     else:
         print(session.get('logged_in'))
         print("Сессия не активна.")
@@ -135,13 +135,75 @@ def details(id):
     phone = execute_read_query(connect_db, check_sql)
     page_title = execute_read_query(connect_db, check_sql)[0]
     print(phone)
-    print(session.get('logged_in'))
-    return render_template("details.html", user_session=session.get('logged_in'), phone=phone, page_title=page_title)
+
+    in_cart = None
+    if session.get('id'):
+        id_active_order = f'''select id from appdroid.order where user_id = {session['id']} 
+                    and active = 1'''
+        id_active_order = execute_read_query(connect_db, id_active_order)
+
+        in_cart = f'''select appdroid.order.id, appdroid.order.user_id, order_has_phone.order_id, 
+        order_has_phone.phone_id from appdroid.order, order_has_phone 
+        where order_has_phone.order_id={id_active_order[0]['id']} and appdroid.order.user_id={session['id']} 
+        and order_has_phone.phone_id={id}'''
+        in_cart = execute_read_query(connect_db, in_cart)
+        if in_cart != tuple():
+            in_cart = in_cart[0]['phone_id']
+            print(id_active_order)
+            print("ЕСТЬ В КОРЗИНЕ")
+            return render_template("details.html", user_session=session.get('logged_in'),
+                                   user_session_id=session.get('id'),
+                                   phone=phone, page_title=page_title,
+                                   in_cart=in_cart)
+
+    return render_template("details.html", user_session=session.get('logged_in'),
+                           phone=phone, page_title=page_title, in_cart=in_cart)
 
 
-@app.route('/cart', methods=['GET', 'POST'])
-def cart():
-    return render_template("cart.html", user_session=session.get('logged_in'))
+@app.route('/add_to_cart', methods=['GET', 'POST'])
+def add_to_cart():
+    id_active_order = f'''select id from appdroid.order where user_id = {session['id']} 
+    and active = 1'''
+    id_active_order = execute_read_query(connect_db, id_active_order)
+
+    if id_active_order == tuple():  # ЗАКАЗА НЕТ
+        print('НЕТ ЗАКАЗА')
+
+        create_active_order = f'''insert into appdroid.order (`user_id`, `active`) 
+        values ('{session['id']}', 1)'''
+        execute_query(connect_db, create_active_order)
+        print('ЗАКАЗ СОЗДАН')
+
+        id_active_order = f'''select id from appdroid.order where user_id = {session['id']} 
+            and active = 1'''
+        id_active_order = execute_read_query(connect_db, id_active_order)
+
+        phone_id = request.form.get('phone_id')
+        print(phone_id)
+        # count = request.form.get('count') # ДЛЯ КОЛИЧЕСТВА ТОВАРОВ
+        if phone_id and request.method == "POST":
+            to_cart = f'''insert into order_has_phone (`order_id`, `phone_id`, `count`)
+                values ('{id_active_order[0]['id']}', '{phone_id}', 1)'''
+            execute_query(connect_db, to_cart)
+
+            print('ДОБАВЛЕН В КОРЗИНУ')
+        return redirect(request.referrer)
+
+    if id_active_order != tuple():  # ЗАКАЗ ЕСТЬ
+        print('ЗАКАЗ ЕСТЬ')
+
+        phone_id = request.form.get('phone_id')
+        phone_id = int(phone_id)
+
+        print(id_active_order)
+        # count = request.form.get('count') # ДЛЯ КОЛИЧЕСТВА ТОВАРОВ
+        if phone_id and request.method == "POST":
+            to_cart = f'''insert into order_has_phone (`order_id`, `phone_id`, `count`)
+            values ('{id_active_order[0]['id']}', '{phone_id}', 1)'''
+            execute_query(connect_db, to_cart)
+
+            print('ДОБАВЛЕН В КОРЗИНУ')
+        return redirect(request.referrer)
 
 
 if __name__ == '__main__':
