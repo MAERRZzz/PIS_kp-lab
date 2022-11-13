@@ -2,76 +2,88 @@
 <head>
     <meta charset="UTF-8">
     <title>Корзина</title>
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,900" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="./static/css/cart.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./static/css/cart.css">
 
     <style>
       h1{
         text-align: center;
         padding-top:100px
       }
+
+
     </style>
+
 </head>
+<body>
 {% extends "base.html" %}
 {% block body %}
-<body>
-   <div class="CartContainer">
-   	   <div class="Header">
-   	   	<h3 class="Heading">Shopping Cart</h3>
-   	   	<h5 class="Action">Remove all</h5>
-   	   </div>
+{%if user_session != True%}
+<div style="text-align: center;">
+    <h4>Войдите в аккаунт</h4>
+</div>
+{%else%}
+{%if not phone%}
+<div style="text-align: center;">
+    <h4>Корзина пуста</h4>
+</div>
+{%else%}
+<div class="CartContainer">
 
-   	   <div class="Cart-Items">
-   	   	  <div class="image-box">
-   	   	  	<img src="images/apple.png" style="height: 120px" />
-   	   	  </div>
-   	   	  <div class="about">
-   	   	  	<h1 class="title">Apple Juice</h1>
-   	   	  	<h3 class="subtitle">250ml</h3>
-   	   	  	<img src="images/veg.png" style="height: 120px"/>
-   	   	  </div>
-   	   	  <div class="counter">
-   	   	  	<div class="btn">+</div>
-   	   	  	<div class="count">2</div>
-   	   	  	<div class="btn">-</div>
-   	   	  </div>
-   	   	  <div class="prices">
-   	   	  	<div class="amount">$2.99</div>
-   	   	  	<div class="save"><u>Save for later</u></div>
-   	   	  	<div class="remove"><u>Remove</u></div>
-   	   	  </div>
-   	   </div>
+    <div class="Header">
+        <h3 class="Heading">Ваша корзина</h3>
+        <h5 class="Action">Удалить всё</h5>
+    </div>
+    <hr>
+    {%for phone in phone%}
+    <div class="Cart-Items">
+        <div class="product-img">
+            <a href="/details/{{phone.id}}">
+                <img src="{{phone.image}}" style="height: 100%; "/>
+            </a>
+        </div>
+        <div class="about">
+            <h3 class="title">{{phone.brand}} {{phone.model}}</h3>
+            <h3 class="subtitle">{{phone.color_title}}</h3>
+            <div class="info" style="color: #787878;">
+                ОC: {{phone.OS}}
+                <br>Год выпуска: {{phone.year}}
+                <br>Оперативная память: {{phone.RAM}} ГБ
+                <br>Встроенная память: {{phone.memory}} ГБ
+            </div>
+        </div>
+        <div class="right_info">
+            <form action="/delete_from_cart" method="POST">
+                <input type="hidden" name="phone_id" value="{{phone.id}}">
+                <button style="border: None; background-color: white;" class="remove"><u>Удалить</u></button>
+            </form>
 
-   	   <div class="Cart-Items pad">
-   	   	  <div class="image-box">
-   	   	  	<img src="images/grapes.png" style="height: 120px" />
-   	   	  </div>
-   	   	  <div class="about">
-   	   	  	<h1 class="title">Grapes Juice</h1>
-   	   	  	<h3 class="subtitle">250ml</h3>
-   	   	  	<img src="images/veg.png" style="height: 120px"/>
-   	   	  </div>
-   	   	  <div class="counter">
-   	   	  	<div class="btn">+</div>
-   	   	  	<div class="count">1</div>
-   	   	  	<div class="btn">-</div>
-   	   	  </div>
-   	   	  <div class="prices">
-   	   	  	<div class="amount">$3.19</div>
-   	   	  	<div class="save"><u>Save for later</u></div>
-   	   	  	<div class="remove"><u>Remove</u></div>
-   	   	  </div>
-   	   </div>
-   	 <hr>
-   	 <div class="checkout">
-   	 <div class="total">
-   	 	<div>
-   	 		<div class="Subtotal">Sub-Total</div>
-   	 		<div class="items">2 items</div>
-   	 	</div>
-   	 	<div class="total-amount">$6.18</div>
-   	 </div>
-   	 <button class="button">Checkout</button></div>
-   </div>{%endblock%}
+            <div class="prices">
+                <br>
+                <h5>{{phone.count}} шт.</h5>
+                <div class="amount">₽ {{phone.price}}</div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {%endfor%}
+
+    <div class="checkout">
+        <div class="total">
+            <div>
+                <div class="Subtotal">Итого:</div>
+                <div class="items">Кол-во смартфонов: {{phones_count}}</div>
+            </div>
+            <div class="total-amount">₽ {{cart_bill}}</div>
+        </div>
+        <form action="/payment" method="POST">
+            <input type="hidden" name="id_payment_order" value="{{id_active_order}}">
+            <button class="button">Оплатить</button>
+        </form>
+    </div>
+    {%endif%}
+</div>
+{%endif%}
+{%endblock%}
 </body>
 </html>

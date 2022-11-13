@@ -88,6 +88,9 @@ def reg():
 # Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if (request.referrer != request.url_root + 'login') and (request.referrer != request.url_root + 'reg'):
+        session['request'] = request.referrer
+    print(session.get('request'))
     msg = ''
     if request.method == 'POST' and 'nickname' in request.form and 'password' in request.form:
         nickname = request.form['nickname']
@@ -113,6 +116,8 @@ def login():
                     session['nickname'] = login_user['nickname']
                     session['id'] = login_user['id']
                     session['admin'] = login_user['admin']
+                    if session.get('request') is not None:
+                        return redirect(session.get('request'))
                     return redirect(url_for('check_user'))
             else:
                 msg = 'Неверный никнейм или пароль.'
@@ -122,7 +127,8 @@ def login():
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect(url_for('check_user'))
+    session['request'] = request.referrer
+    return redirect(session.get('request'))
 
 
 @app.route("/details/<int:id>", methods=['GET', 'POST'])
@@ -133,7 +139,10 @@ def details(id):
         and color.title=phone_has_color.color_title
         and phone.id={id} group by model '''
     phone = execute_read_query(connect_db, check_sql)
-    page_title = execute_read_query(connect_db, check_sql)[0]
+    if phone == tuple():
+        return redirect(url_for('check_user'))
+    else:
+        page_title = phone[0]
     print(phone)
 
     in_cart = None
@@ -141,20 +150,25 @@ def details(id):
         id_active_order = f'''select id from appdroid.order where user_id = {session['id']} 
                     and active = 1'''
         id_active_order = execute_read_query(connect_db, id_active_order)
+        if id_active_order != tuple():
 
-        in_cart = f'''select appdroid.order.id, appdroid.order.user_id, order_has_phone.order_id, 
-        order_has_phone.phone_id from appdroid.order, order_has_phone 
-        where order_has_phone.order_id={id_active_order[0]['id']} and appdroid.order.user_id={session['id']} 
-        and order_has_phone.phone_id={id}'''
-        in_cart = execute_read_query(connect_db, in_cart)
-        if in_cart != tuple():
-            in_cart = in_cart[0]['phone_id']
-            print(id_active_order)
-            print("ЕСТЬ В КОРЗИНЕ")
-            return render_template("details.html", user_session=session.get('logged_in'),
-                                   user_session_id=session.get('id'),
-                                   phone=phone, page_title=page_title,
-                                   in_cart=in_cart)
+            in_cart = f'''select appdroid.order.id, appdroid.order.user_id, order_has_phone.order_id, 
+            order_has_phone.phone_id from appdroid.order, order_has_phone 
+            where order_has_phone.order_id={id_active_order[0]['id']} and appdroid.order.user_id={session['id']} 
+            and order_has_phone.phone_id={id}'''
+            in_cart = execute_read_query(connect_db, in_cart)
+            if in_cart != tuple():
+                in_cart = in_cart[0]['phone_id']
+                print(id_active_order)
+                print("ЕСТЬ В КОРЗИНЕ")
+                phones_count = f'''select sum(order_has_phone.count) as phones_count from order_has_phone 
+                            where order_id={id_active_order[0]['id']} and phone_id={id}'''
+                phones_count = execute_read_query(connect_db, phones_count)
+                phones_count = int(phones_count[0]['phones_count'])
+                return render_template("details.html", user_session=session.get('logged_in'),
+                                       user_session_id=session.get('id'),
+                                       phone=phone, page_title=page_title,
+                                       in_cart=in_cart, phones_count=phones_count)
 
     return render_template("details.html", user_session=session.get('logged_in'),
                            phone=phone, page_title=page_title, in_cart=in_cart)
@@ -179,11 +193,12 @@ def add_to_cart():
         id_active_order = execute_read_query(connect_db, id_active_order)
 
         phone_id = request.form.get('phone_id')
-        print(phone_id)
-        # count = request.form.get('count') # ДЛЯ КОЛИЧЕСТВА ТОВАРОВ
-        if phone_id and request.method == "POST":
-            to_cart = f'''insert into order_has_phone (`order_id`, `phone_id`, `count`)
-                values ('{id_active_order[0]['id']}', '{phone_id}', 1)'''
+        count = request.form.get('count') # ДЛЯ КОЛИЧЕСТВА ТОВАРОВ
+        print(count)
+
+        if phone_id and count and request.method == "POST":
+            to_cart = f'''insert into order_has_phone (`order_id`, `phone_id`, `count`, `add_date`)
+                values ('{id_active_order[0]['id']}', '{phone_id}', '{count}', now())'''
             execute_query(connect_db, to_cart)
 
             print('ДОБАВЛЕН В КОРЗИНУ')
@@ -193,17 +208,77 @@ def add_to_cart():
         print('ЗАКАЗ ЕСТЬ')
 
         phone_id = request.form.get('phone_id')
-        phone_id = int(phone_id)
+        count = request.form.get('count') # ДЛЯ КОЛИЧЕСТВА ТОВАРОВ
+        print(count)
 
-        print(id_active_order)
-        # count = request.form.get('count') # ДЛЯ КОЛИЧЕСТВА ТОВАРОВ
         if phone_id and request.method == "POST":
-            to_cart = f'''insert into order_has_phone (`order_id`, `phone_id`, `count`)
-            values ('{id_active_order[0]['id']}', '{phone_id}', 1)'''
+            to_cart = f'''insert into order_has_phone (`order_id`, `phone_id`, `count`, `add_date`)
+                values ('{id_active_order[0]['id']}', '{phone_id}', '{count}', now())'''
             execute_query(connect_db, to_cart)
 
             print('ДОБАВЛЕН В КОРЗИНУ')
         return redirect(request.referrer)
+
+
+@app.route("/cart")
+def user_cart():
+    if session.get('id'):
+        id_active_order = f'''select id from appdroid.order where user_id = {session.get('id')} 
+            and active = 1'''
+        id_active_order = execute_read_query(connect_db, id_active_order)
+        if id_active_order != tuple():
+            check_sql = f'''SELECT id, OS, year, RAM, memory, image, phone.brand, 
+                        phone.model, phone.price, color_title, order_has_phone.count
+                        FROM phone, phone_has_color, order_has_phone 
+                        where id=order_has_phone.phone_id 
+                        and phone_has_color.phone_id = phone.id and 
+                        order_has_phone.order_id={id_active_order[0]['id']} order by add_date desc'''
+            phone = execute_read_query(connect_db, check_sql)
+
+            cart_bill = f'''select sum(price*order_has_phone.count) as bill from phone, order_has_phone 
+            where order_has_phone.order_id={id_active_order[0]['id']} 
+            and order_has_phone.phone_id=phone.id'''
+            cart_bill = execute_read_query(connect_db, cart_bill)
+            if cart_bill[0]['bill'] is not None:
+                cart_bill = int(cart_bill[0]['bill'])
+                phones_count = f'''select sum(order_has_phone.count) as phones_count from order_has_phone 
+                where order_id={id_active_order[0]['id']}'''
+                phones_count = execute_read_query(connect_db, phones_count)
+                phones_count = int(phones_count[0]['phones_count'])
+
+                return render_template("cart.html", user_session=session.get('logged_in'),
+                                       phone=phone, cart_bill=cart_bill, phones_count=phones_count,
+                                       id_active_order=id_active_order[0]['id'])
+
+    return render_template("cart.html", user_session=session.get('logged_in'))
+
+
+@app.route('/delete_from_cart', methods=['GET', 'POST'])
+def delete_from_cart():
+    id_active_order = f'''select id from appdroid.order where user_id = {session.get('id')} 
+                    and active = 1'''
+    id_active_order = execute_read_query(connect_db, id_active_order)
+    print(id_active_order[0]['id'])
+
+    phone_id = request.form.get('phone_id')
+    print(phone_id)
+
+    delete_phone = f'''DELETE FROM order_has_phone
+    WHERE order_has_phone.order_id={id_active_order[0]['id']} and phone_id={phone_id}'''
+    execute_query(connect_db, delete_phone)
+    return redirect(request.referrer)
+
+
+@app.route('/payment', methods=['GET', 'POST'])
+def payment():
+    id_payment_order = request.form.get('id_payment_order')
+    if id_payment_order is not None and session.get('id'):
+        change_active_order = f'''delete from appdroid.order where id={id_payment_order} and user_id={session.get('id')}'''
+        execute_query(connect_db, change_active_order)
+
+        return render_template("payment.html", user_session=session.get('logged_in'))
+
+    return redirect(url_for('check_user'))
 
 
 if __name__ == '__main__':

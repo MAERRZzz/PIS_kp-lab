@@ -2,8 +2,12 @@
 .CartContainer{
 	width: 70%;
 	background-color: #ffffff;
+	border:None;
     border-radius: 20px;
-	border: 1px solid #E44C4C;
+	border: 1px solid #d6d6d6;
+	margin-left: 225px;
+	margin-bottom: 20px;
+    padding-bottom:20px;
 }
 
 .Header{
@@ -12,44 +16,56 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding-top: 20px;
 }
 
 .Heading{
-	font-size: 20px;
+	font-size: 24px;
 	font-family: 'Open Sans';
 	font-weight: 700;
 	color: #2F3841;
 }
 
 .Action{
-	font-size: 14px;
+	font-size: 16px;
 	font-family: 'Open Sans';
 	font-weight: 600;
 	color: #E44C4C;
 	cursor: pointer;
-	border-bottom: 1px solid #E44C4C;
+    border-bottom: 1px solid #E44C4C;
+    transition: color 0.3s;
+
+}
+.Action:hover{
+    color: purple;
+    border-color:purple;
 }
 
 .Cart-Items{
+
 	margin: auto;
+	margin-top: 10px;
 	width: 90%;
-	height: 30%;
+	height: 40%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
 }
 .image-box{
+
 	width: 15%;
 	text-align: center;
 }
 .about{
 	height: 100%;
-	width: 24%;
+	width: 50%;
 }
 .title{
 	padding-top: 10px;
+	margin-bottom: 15px;
 	line-height: 10px;
-	font-size: 32px;
+	font-size: 26px;
 	font-family: 'Open Sans';
 	font-weight: 800;
 	color: #202020;
@@ -90,11 +106,15 @@
 }
 
 .prices{
-	height: 100%;
+    padding-top: 25px;
+    height: 100%;
 	text-align: right;
+	float:bottom;
+
 }
 .amount{
-	padding-top: 20px;
+	padding-top: 5px;
+
 	font-size: 26px;
 	font-family: 'Open Sans';
 	font-weight: 800;
@@ -109,12 +129,17 @@
 	cursor: pointer;
 }
 .remove{
-	padding-top: 5px;
-	font-size: 14px;
+    width: 68px;
+	font-size: 16px;
 	font-family: 'Open Sans';
 	font-weight: 600;
 	color: #E44C4C;
 	cursor: pointer;
+	transition: color 0.3s;
+	float:right;
+}
+.remove:hover{
+    color: purple;
 }
 
 .pad{
@@ -122,22 +147,22 @@
 }
 
 hr{
-	width: 66%;
-	float: right;
+	width: 100%;
 	margin-right: 5%;
 }
 .checkout{
-	float: right;
-	margin-right: 5%;
-	width: 28%;
+	float: center;
+	width: 40%;
+	margin-left: auto;
+    margin-right: auto
 }
 .total{
 	width: 100%;
-	display: flex;
+    display: flex;
 	justify-content: space-between;
 }
 .Subtotal{
-	font-size: 22px;
+	font-size: 24px;
 	font-family: 'Open Sans';
 	font-weight: 700;
 	color: #202020;
@@ -168,3 +193,25 @@ hr{
 	font-weight: 600;
 	color: #202020;
 }
+.button:hover{
+}
+.product-img {
+        transition: 0.3s ease-in-out;
+        height: 100%;
+        max-height: 260px;
+        max-width: 260px;
+        min-height: 260px;
+        min-width: 260px;
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+ }
+        .product-img:hover {
+           transform: scale(1.03);
+        }
+.product-img img {
+            height: 270px;
+            max-width: 100%;
+            width: auto;
+        }

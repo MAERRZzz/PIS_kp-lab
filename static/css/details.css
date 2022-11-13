@@ -127,6 +127,22 @@ html, body {
 .cart-btn:hover {
   background-color: #64af3d;
 }
+.cart-btn-delete{
+  display: inline-block;
+  background-color: purple;
+  border: None;
+  border-radius: 6px;
+  font-size: 16px;
+  color: white;
+  text-decoration: none;
+  padding: 10px 30px;
+  transition: all .5s;
+  text-align: center;
+
+}
+.cart-btn-delete:hover {
+  background-color: #f01202;
+}
 /* Responsive */
 @media (max-width: 940px) {
   .container {
@@ -146,6 +162,7 @@ html, body {
     left: initial;
   }
 }
+
 
 @media (max-width: 535px) {
   .left-column img {

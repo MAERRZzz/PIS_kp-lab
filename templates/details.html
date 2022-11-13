@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/details.css')}}">
     <title>{{page_title.brand}} {{page_title.model}}</title>
+
     <style>
       h1{
         text-align: center;
@@ -13,9 +14,19 @@
 
 
 
-
     </style>
+
 </head>
+<script>
+    if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+    }
+
+
+
+
+
+</script>
 
 <body>
 {% extends "base.html" %}
@@ -44,8 +55,8 @@
                     <br>Год выпуска: {{phone.year}}
                     <br>Диагональ экрана (дюйм): {{phone.diagonal}}
                     <br>Кол-во ядер: {{phone.cores}}
-                    <br>Оперативная память: {{phone.RAM}}
-                    <br>Встроенная память: {{phone.diagonal}}
+                    <br>Оперативная память: {{phone.RAM}} ГБ
+                    <br>Встроенная память: {{phone.memory}} ГБ
                     <br>Кол-во SIM-карт: {{phone.SIM}}
                     <br>NFC: {{phone.NFC}}
                 </div>
@@ -79,34 +90,51 @@
         </div>
 
         <!-- Product Pricing and Count-->
-        <form action="/add_to_cart" method="POST">
-            <!--            <label style="margin-bottom: 5px">Количество:</label>-->
-            <!--            {%if phone.count > 10%}-->
-            <!--            <input type="number" name="count" value="1" min="1" max="10">-->
-            <!--            {%else%}-->
-            <!--            <input type="number" name="count" value="1" min="1" max="{{phone.count}}">-->
-            <!--            {%endif%}-->
+        {%if user_session == True%}
+        {%if in_cart == phone.id%}
+        <form style="margin-bottom: 0px;" action="/add_to_cart" method="POST">
+            <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
+            <input style="width: 60px;" disabled type="number" name="count" value="{{phones_count}}" min="1" max="10">
+        </form>
+
+        <form action="/delete_from_cart" method="POST">
             <div class="product-price">
                 <span>₽ {{phone.price}}</span>
-            {%if user_session == True%}
-
-                {%if in_cart == phone.id%}
-                <button disabled style="background-color: purple;"
-                        type="submit" class="cart-btn">Уже в корзине
-                </button>
-                    {%else%}
                 <input type="hidden" name="phone_id" value="{{phone.id}}">
-                <button class="cart-btn">В корзину</button>
-                    {%endif%}
-
-            {%else%}
-                <button disabled class="cart-btn"
-                        style="background-color: grey;">В корзину
-                </button>
+                <button class="cart-btn-delete">Удалить из корзины</button>
             </div>
         </form>
-        <h6 style="text-align: right;">Войдите в аккаунт</h6>
+
+        {%else%}
+        <form style="margin-bottom: 0px;" action="/add_to_cart" method="POST">
+            {%if phone.count > 10%}
+            <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
+            <input style="width: 60px;" type="number" name="phone_count" value="1" min="1" max="10">
+            {%else%}
+            <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
+            <input style="width: 60px;" type="number" name="count" value="1" min="1" max="{{phone.count}}">
             {%endif%}
+            <div class="product-price">
+                <span>₽ {{phone.price}}</span>
+                <input type="hidden" name="phone_id" value="{{phone.id}}">
+                <button class="cart-btn">В корзину</button>
+            </div>
+        </form>
+        {%endif%}
+        {%else%}
+        <form style="margin-bottom: 0px;" action="/add_to_cart" method="POST">
+            <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
+            <input style="width: 60px;" disabled type="number" name="count" value="{{phones_count}}" min="1" max="10">
+        </form>
+        <div class="product-price">
+            <span>₽ {{phone.price}}</span>
+            <button disabled class="cart-btn"
+                    style="background-color: grey;">В корзину
+            </button>
+        </div>
+        <h6 style="text-align: right;">Войдите в аккаунт</h6>
+
+        {%endif%}
     </div>
 </div>
 {%endfor%}
