@@ -38,7 +38,7 @@
     {%for phone in phone%}
     <div class="Cart-Items">
         <div class="product-img">
-            <a href="/details/{{phone.id}}">
+            <a href="/details/{{phone.id}}/{{phone.color_title}}">
                 <img src="{{phone.image}}" style="height: 100%; "/>
             </a>
         </div>
@@ -55,6 +55,7 @@
         <div class="right_info">
             <form action="/delete_from_cart" method="POST">
                 <input type="hidden" name="phone_id" value="{{phone.id}}">
+                <input type="hidden" name="phone_color" value="{{phone.color_title}}">
                 <button style="border: None; background-color: white;" class="remove"><u>Удалить</u></button>
             </form>
 

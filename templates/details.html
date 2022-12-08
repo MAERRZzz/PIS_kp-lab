@@ -2,18 +2,13 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/details.css')}}">
-    <title>{{page_title.brand}} {{page_title.model}}</title>
+    <title>{{phone[0].brand}} {{phone[0].model}}</title>
 
     <style>
       h1{
         text-align: center;
         padding-top:100px;
       }
-
-
-
-
-
     </style>
 
 </head>
@@ -21,11 +16,6 @@
     if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
     }
-
-
-
-
-
 </script>
 
 <body>
@@ -62,29 +52,20 @@
                 </div>
             </div>
         </div>
-
         <!-- Product Configuration -->
         <div class="product-configuration">
-
             <!-- Product Color -->
             <div class="product-color">
-                <span style="font-size: 20; margin-top: -5px">Цвет</span>
-
-                <div class="color-choose">
-                    <div>
-                        <input data-image="red" type="radio" id="red" name="color" value="red" checked>
-                        <label for="red"><span></span></label>
-                    </div>
-                    <div>
-                        <input data-image="blue" type="radio" id="blue" name="color" value="blue">
-                        <label for="blue"><span></span></label>
-                    </div>
-                    <div>
-                        <input data-image="black" type="radio" id="black" name="color" value="black">
-                        <label for="black"><span></span></label>
-                    </div>
-                </div>
-
+                {% if colors_count > 1 %}
+                <form style="margin-bottom: 0px;" action="/colors" method="POST">
+                    <input type="hidden" name="phone_model" value="{{phone.model}}">
+                    <button class="cart-btn" >Другие цвета...</button>
+                </form>
+                {% else %}
+                <form style="margin-bottom: 0px;"  method="POST">
+                    <button disabled class="cart-btn">Единственный цвет</button>
+                </form>
+                {% endif %}
             </div>
 
         </div>
@@ -94,13 +75,14 @@
         {%if in_cart == phone.id%}
         <form style="margin-bottom: 0px;" action="/add_to_cart" method="POST">
             <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
-            <input style="width: 60px;" disabled type="number" name="count" value="{{phones_count}}" min="1" max="10">
+            <input style="width: 60px;" disabled type="number" name="count" value="{{in_cart_count}}" min="1" max="10">
         </form>
 
         <form action="/delete_from_cart" method="POST">
             <div class="product-price">
                 <span>₽ {{phone.price}}</span>
                 <input type="hidden" name="phone_id" value="{{phone.id}}">
+                <input type="hidden" name="phone_color" value="{{phone.color_title}}">
                 <button class="cart-btn-delete">Удалить из корзины</button>
             </div>
         </form>
@@ -112,11 +94,12 @@
             <input style="width: 60px;" type="number" name="phone_count" value="1" min="1" max="10">
             {%else%}
             <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
-            <input style="width: 60px;" type="number" name="count" value="1" min="1" max="{{phone.count}}">
+            <input style="width: 60px;" type="number" name="count" value="1" min="1" max="{{phone_count[0].count}}">
             {%endif%}
             <div class="product-price">
                 <span>₽ {{phone.price}}</span>
                 <input type="hidden" name="phone_id" value="{{phone.id}}">
+                <input type="hidden" name="phone_color" value="{{phone.color_title}}">
                 <button class="cart-btn">В корзину</button>
             </div>
         </form>
