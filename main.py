@@ -317,5 +317,10 @@ def colors():
                            phone_colors=phone_colors)
 
 
+@app.route('/search/')
+def search():
+    return render_template("login.html")
+
+
 if __name__ == '__main__':
     app.run(debug=True)

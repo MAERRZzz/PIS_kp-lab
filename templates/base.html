@@ -13,48 +13,56 @@
 <body>
 <header class="p-3 mb-3 border-bottom" style="text-align: center">
     <div class="container" style="width: 1250px">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <div style="padding-right: 5px;">
-          <a style="margin-right: 0px; font-size: 24px;  width: 210px;" href="/" class="d-block link-dark text-decoration-none">AppDroid
-              <img style="margin-right: -35px;" src="../static/pictures/icons8-phone-64.png" width="60" height="60">
-          </a>
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <div style="padding-right: 5px;">
+                <a style="margin-right: 0px; font-size: 24px;  width: 210px;" href="/"
+                   class="d-block link-dark text-decoration-none">AppDroid
+                    <img style="margin-right: -35px;" src="../static/pictures/icons8-phone-64.png" width="60"
+                         height="60">
+                </a>
+            </div>
+            <ul style=" font-size: 16px;" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li class="pages"><a href="https://vk.com/xmaerzx" class="nav-link px-2 link-dark">Контакты</a></li>
+                <li class="pages"><a href="https://www.youtube.com/channel/UCUE1wT6EjGoOZkbS-LxvI0A"
+                                     class="nav-link px-2 link-dark">О нас</a></li>
+                <li class="pages"><a href="https://vk.com/xmaerzx" class="nav-link px-2 link-dark">Поддержка</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 " action="/search/" style="width: 300px" role="search">
+                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+            </form>
+
+            <div style="width: 130px; padding-right: 5px;">
+                <a style="font-size: 16px;" href="/cart" class="d-block link-dark text-decoration-none col-lg-auto">Корзина
+                    <img style="margin-right: -25px; " src="../static/pictures/icons8-shopping-cart-32.png" width="28"
+                         height="28"
+                    >
+                </a>
+            </div>
+
+            {%if user_session == True %}
+            <div style="width: 130px;">
+                <a style="font-size: 16px;" href="/profile" class="d-block link-dark text-decoration-none col-lg-auto">Профиль
+                    <img style="margin-right: -25px;" src="../static/pictures/icons8-user-32.png" width="28"
+                         height="28">
+                </a>
+
+                <a style="font-size: 16px;" href="/logout" class="d-block link-dark text-decoration-none">Выйти
+                    <img style="margin-right: -25px; " src="../static/pictures/icons8-logout-32.png" width="28"
+                         height="28">
+                </a>
+                {%else%}
+                <div style="width: 130px;">
+                    <a style="font-size: 16px;" href="/login" class="d-block link-dark text-decoration-none">Войти
+                        <img style="margin-right:-25px" src="../static/pictures/icons8-enter-32.png" width="28"
+                             height="28" class="rounded-circle">
+                    </a>
+                </div>
+                {%endif%}
+            </div>
         </div>
-        <ul style=" font-size: 16px;" class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li class="pages"><a href="https://vk.com/xmaerzx" class="nav-link px-2 link-dark">Контакты</a></li>
-          <li class="pages"><a href="https://www.youtube.com/channel/UCUE1wT6EjGoOZkbS-LxvI0A" class="nav-link px-2 link-dark">О нас</a></li>
-          <li class="pages"><a href="https://vk.com/xmaerzx" class="nav-link px-2 link-dark">Поддержка</a></li>
-        </ul>
-
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 " style="width: 300px" role="search">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-        </form>
-          <div style="width: 130px; padding-right: 5px;">
-            <a style="font-size: 16px;" href="/cart" class="d-block link-dark text-decoration-none col-lg-auto">Корзина
-                  <img style="margin-right: -25px; " src="../static/pictures/icons8-shopping-cart-32.png" width="28" height="28"
-                      >
-            </a>
-          </div>
-
-          {%if user_session == True %}
-          <div style="width: 130px;">
-              <a style="font-size: 16px;" href="/profile" class="d-block link-dark text-decoration-none col-lg-auto">Профиль
-                  <img style="margin-right: -25px;" src="../static/pictures/icons8-user-32.png" width="28" height="28">
-              </a>
-
-              <a style="font-size: 16px;" href="/logout" class="d-block link-dark text-decoration-none">Выйти
-                  <img style="margin-right: -25px; " src="../static/pictures/icons8-logout-32.png" width="28" height="28">
-              </a>
-              {%else%}
-              <div style="width: 130px;">
-                  <a style="font-size: 16px;" href="/login" class="d-block link-dark text-decoration-none">Войти
-                      <img style="margin-right:-25px" src="../static/pictures/icons8-enter-32.png" width="28" height="28" class="rounded-circle">
-                  </a>
-              </div>
-              {%endif%}
-          </div>
-      </div>
     </div>
-  </header>
+</header>
 {% block body %} {% endblock %}
 </body>
 </html>
