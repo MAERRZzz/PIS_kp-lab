@@ -38,7 +38,6 @@ def check_user():
     check_sql = f'''SELECT id, phone_has_color.image, phone.brand, phone.model, phone.price, color_id
             FROM phone, phone_has_color where phone_has_color.count>0 and phone_has_color.phone_id = phone.id group by phone.model'''
     phone = execute_read_query(connect_db, check_sql)
-    print(phone)
 
     panel_phones = f'''select * from phone order by brand'''
     panel_phones = execute_read_query(connect_db, panel_phones)
@@ -152,14 +151,14 @@ def details(id, color_id):
 
     in_cart = None
     if session.get('id'):
-        id_active_order = f'''select id from appdroid.order where user_id = {session['id']} 
+        id_active_order = f'''select id from order where user_id = {session['id']} 
                     and active = 1'''
         id_active_order = execute_read_query(connect_db, id_active_order)
         if id_active_order != tuple():
 
-            in_cart = f'''select appdroid.order.id, appdroid.order.user_id, order_has_phone.order_id, 
-            order_has_phone.phone_id, order_has_phone.phone_color, order_has_phone.count from appdroid.order, order_has_phone 
-            where order_has_phone.order_id={id_active_order[0]['id']} and appdroid.order.user_id={session['id']} 
+            in_cart = f'''select order.id, order.user_id, order_has_phone.order_id, 
+            order_has_phone.phone_id, order_has_phone.phone_color, order_has_phone.count from order, order_has_phone 
+            where order_has_phone.order_id={id_active_order[0]['id']} and order.user_id={session['id']} 
             and order_has_phone.phone_id={id} and order_has_phone.phone_color='{color_id}' '''
             in_cart = execute_read_query(connect_db, in_cart)
             if in_cart != tuple():
@@ -189,19 +188,19 @@ def details(id, color_id):
 
 @app.route('/add_to_cart', methods=['GET', 'POST'])
 def add_to_cart():
-    id_active_order = f'''select id from appdroid.order where user_id = {session['id']} 
+    id_active_order = f'''select id from order where user_id = {session['id']} 
     and active = 1'''
     id_active_order = execute_read_query(connect_db, id_active_order)
 
     if id_active_order == tuple():  # ЗАКАЗА НЕТ
         # print('НЕТ ЗАКАЗА')
 
-        create_active_order = f'''insert into appdroid.order (`user_id`, `active`) 
+        create_active_order = f'''insert into order (`user_id`, `active`) 
         values ('{session['id']}', 1)'''
         execute_query(connect_db, create_active_order)
         # print('ЗАКАЗ СОЗДАН')
 
-        id_active_order = f'''select id from appdroid.order where user_id = {session['id']} 
+        id_active_order = f'''select id from order where user_id = {session['id']} 
             and active = 1'''
         id_active_order = execute_read_query(connect_db, id_active_order)
 
@@ -239,7 +238,7 @@ def add_to_cart():
 @app.route("/cart")
 def user_cart():
     if session.get('id'):
-        id_active_order = f'''select id from appdroid.order where user_id = {session.get('id')} 
+        id_active_order = f'''select id from order where user_id = {session.get('id')} 
             and active = 1'''
         id_active_order = execute_read_query(connect_db, id_active_order)
         if id_active_order != tuple():
@@ -273,7 +272,7 @@ def user_cart():
 
 @app.route('/delete_from_cart', methods=['GET', 'POST'])
 def delete_from_cart():
-    id_active_order = f'''select id from appdroid.order where user_id = {session.get('id')} 
+    id_active_order = f'''select id from order where user_id = {session.get('id')} 
                     and active = 1'''
     id_active_order = execute_read_query(connect_db, id_active_order)
 
@@ -290,7 +289,7 @@ def delete_from_cart():
 def payment():
     id_payment_order = request.form.get('id_payment_order')
     if id_payment_order is not None and session.get('id'):
-        change_active_order = f'''delete from appdroid.order where id={id_payment_order} and user_id={session.get('id')}'''
+        change_active_order = f'''delete from order where id={id_payment_order} and user_id={session.get('id')}'''
         execute_query(connect_db, change_active_order)
 
         return render_template("payment.html", user_session=session.get('logged_in'))
@@ -393,7 +392,7 @@ def edit_phone():
     SIM = request.form.get('SIM')
     cores = request.form.get('cores')
 
-    update_info = f'''UPDATE `appdroid`.`phone` SET `brand` = '{brand}', `model` = '{model}', `OS` = '{OS}',
+    update_info = f'''UPDATE `phone` SET `brand` = '{brand}', `model` = '{model}', `OS` = '{OS}',
         `year` = '{year}', `price` = '{price}', `diagonal` = '{diagonal}', `NFC` = '{NFC}', `RAM` = '{RAM}',
         `memory` = '{memory}', `SIM` = '{SIM}', `cores` = '{cores}' WHERE id = '{phone_id}' '''
     execute_query(connect_db, update_info)
@@ -421,7 +420,7 @@ def phone_colors(id):
             add_color = f'''insert into color (`title`) values ('{color}') '''
             color_id = execute_query(connect_db, add_color)
 
-        add_color = f'''INSERT INTO `appdroid`.`phone_has_color` (`phone_id`, `color_id`, `count`, `image`) 
+        add_color = f'''INSERT INTO `phone_has_color` (`phone_id`, `color_id`, `count`, `image`) 
                 VALUES ('{id}', '{color_id}', '{count}', '{image}'); '''
         execute_query(connect_db, add_color)
         flash("Цвет добавлен.")
@@ -430,7 +429,7 @@ def phone_colors(id):
     if request.method == 'POST' and request.form.get('delete_color'):
         color_id = request.form.get('delete_color')
 
-        delete_color = f'''DELETE FROM `appdroid`.`phone_has_color` 
+        delete_color = f'''DELETE FROM `phone_has_color` 
                 WHERE (`phone_id` = '{id}') and (`color_id` = '{color_id}');'''
         execute_query(connect_db, delete_color)
         flash("Цвет удален.")
@@ -441,12 +440,12 @@ def phone_colors(id):
 
 @app.route('/delete/<int:id>', methods=['GET', 'POST'])
 def delete_phone(id):
-    phone = f'''select brand, model from `appdroid`.`phone` WHERE (`id` = '{id}')'''
+    phone = f'''select brand, model from `phone` WHERE (`id` = '{id}')'''
     phone = execute_read_query(connect_db, phone)
     phone = f"{phone[0]['brand']} " \
             f"{phone[0]['model']}"
 
-    deleting_phone = f'''DELETE FROM `appdroid`.`phone` WHERE (`id` = '{id}')'''
+    deleting_phone = f'''DELETE FROM `phone` WHERE (`id` = '{id}')'''
     execute_query(connect_db, deleting_phone)
     flash(f"{phone} удален.")
     return redirect('/')
