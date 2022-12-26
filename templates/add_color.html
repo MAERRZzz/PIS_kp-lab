@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить / удалить цвет</title>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      .container{
+          width: 400px;
+      }
+      label{
+      color: grey
+      }
+      .cart-btn {
+          display: inline-block;
+          background-color: #0d6efd;
+          border: None;
+          border-radius: 6px;
+          font-size: 16px;
+          color: white;
+          text-decoration: none;
+          padding: 9px 17px;
+          transition: all .5s;
+          text-align: center;
+        }
+    d-block {
+        font-size: 18px;
+        border: None;
+        border-radius: 5px;
+        background-color: white;
+        transition: background 0.3s;
+    }
+    d-block:hover {
+        background-color: rgb(217, 217, 217);
+    }
+    </style>
+</head>
+{% extends "base.html" %}
+{% block body %}
+<body>
+<div class="container ">
+    <div class="container" style="width: 1050px;">
+        <div style="width: 130px; margin-left: 85%;">
+            <a href="/" style=" text-align:center"
+               class="d-block link-dark text-decoration-none text-center">Назад</a>
+        </div>
+    </div>
+    <div class="container text-center" style="width: 800px;">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div style="padding: 5px;" class="alert alert-info" role="alert">
+            {% for message in messages %}
+            <div>{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div class="row justify-content-center">
+
+        <div class="col-lg-6" style="width: 400px; text-align: center">
+            <form method="POST">
+                <h1 class="text-center h3 mb-3 fw-normal">Добавление цвета</h1>
+                <div class="form-floating pb-2">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="f" name='color'
+                           required/>
+                    <label for="floatingInput">Цвет</label>
+                </div>
+                <div class="form-floating pb-2">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="f" name='image'
+                           required/>
+                    <label for="floatingInput">Фотография (ссылка)</label>
+                </div>
+                <div class="form-floating pb-2">
+                    <input type="number" class="form-control" id="floatingInput" placeholder="f" name='count'
+                           min="1" required/>
+                    <label for="floatingInput">Кол-во смартфонов</label>
+                </div>
+                <div class="text-center ">
+                    <button style="margin-top: 15px" class="w-50 btn btn-lg btn-primary mb-2" type="submit">Добавить</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-6" style="width: 400px; text-align: center">
+            <form method="POST">
+            <div class="container text-center" style="width: 400px">
+                <h1 class="text-center h3 mb-3 fw-normal">Удаление цвета</h1>
+                <div class="form-floating">
+                    <select class="form-select" name="delete_color">
+                        {% for color_info in color_info %}
+                        <option data-tokens="{{ color_info.title }}" name="{{ color_info.id }}"
+                                value="{{ color_info.id }}">{{ color_info.title }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <label>Цвет</label>
+                </div>
+                <div class="text-center ">
+                    <button class="w-50 btn btn-lg btn-primary" style="margin-top: 155px" type="submit">Удалить</button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+</body>
+</html>

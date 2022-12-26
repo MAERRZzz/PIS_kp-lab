@@ -26,9 +26,7 @@
 <!-- Left Column / Headphones Image -->
 <div class="box">
     <div class="left-column">
-        <img data-image="black" src="images/black.png" alt="">
-        <img data-image="blue" src="images/blue.png" alt="">
-        <img data-image="red" class="active" src="{{phone.image}}" alt="">
+        <img class="active" src="{{phone.image}}" alt="">
     </div>
 
     <!-- Right Column -->
@@ -38,7 +36,7 @@
         <div class="product-description">
             <h5><b>{{phone.brand}} {{phone.model}}</b></h5>
             <h5 style="font-size: 34; margin-top: -5px;   letter-spacing: 1px;">
-                ({{phone.color_title}})</h5>
+                ({{phone.title}})</h5>
             <div class="characteristics" style="font-size: 18;   font-weight: 380;">
                 <div class="text" style="margin-top: -20px; margin-bottom: 10px;">
                     <br>Операционная система: {{phone.OS}}
@@ -82,24 +80,24 @@
             <div class="product-price">
                 <span>₽ {{phone.price}}</span>
                 <input type="hidden" name="phone_id" value="{{phone.id}}">
-                <input type="hidden" name="phone_color" value="{{phone.color_title}}">
+                <input type="hidden" name="phone_color" value="{{phone.color_id}}">
                 <button class="cart-btn-delete">Удалить из корзины</button>
             </div>
         </form>
 
         {%else%}
         <form style="margin-bottom: 0px;" action="/add_to_cart" method="POST">
-            {%if phone.count > 10%}
+            {%if phone_count > 10 %}
             <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
             <input style="width: 60px;" type="number" name="phone_count" value="1" min="1" max="10">
             {%else%}
             <label style="margin-bottom: 5px; font-size: 18px;">Количество:</label>
-            <input style="width: 60px;" type="number" name="count" value="1" min="1" max="{{phone_count[0].count}}">
+            <input style="width: 60px;" type="number" name="count" value="1" min="1" max="{{phone_count}}">
             {%endif%}
             <div class="product-price">
-                <span>₽ {{phone.price}}</span>
+                <span>₽ {{phone.price}} </span>
                 <input type="hidden" name="phone_id" value="{{phone.id}}">
-                <input type="hidden" name="phone_color" value="{{phone.color_title}}">
+                <input type="hidden" name="phone_color" value="{{phone.color_id}}">
                 <button class="cart-btn">В корзину</button>
             </div>
         </form>

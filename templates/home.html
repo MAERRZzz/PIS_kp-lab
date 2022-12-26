@@ -1,14 +1,255 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CEPU-QR</title>
+    <title>Главная страница</title>
     <style>
-      h1{
-        text-align: center;
-        padding-top:100px
-      }
+        .green-btn {
+          display: inline-block;
+          background-color: #7DC855;
+          border: None;
+          border-radius: 6px;
+          font-size: 16px;
+          color: white;
+          text-decoration: none;
+          padding: 10px 17px;
+          transition: all .5s;
+          text-align: center;
+        }
+        #green:hover {
+            background-color: #60b526;
+<!--            #82d649;-->
+        }
+        .cart-btn {
+          display: inline-block;
+          background-color: #0d6efd;
+          border: None;
+          border-radius: 6px;
+          font-size: 16px;
+          color: white;
+          text-decoration: none;
+          padding: 9px 17px;
+          transition: all .5s;
+          text-align: center;
+        }
+        .cart-btn:hover {
+            background-color: purple;
+            color: white;
+        }
+        d-block {
+    font-size: 18px;
+    border: None;
+    border-radius: 5px;
+    background-color: white;
+    transition: background 0.3s;
+    }
+    d-block:hover {
+        background-color: rgb(217, 217, 217);
+    }
+
+
+
     </style>
+
 </head>
 <body>
-    <h1>Зашел, {{msg}}-оджа😎😎</h1></body>
+{% extends "base.html" %}
+{% block body %}
+<div class="container" style="width:1350px; ">
+    <div style="width: 200px; margin-left: 83%;">
+        <a href="/add" style=" text-align:center"
+           class="d-block link-dark text-decoration-none text-center">Добавить смартфон</a>
+    </div>
+    <div class="container text-center" style="width: 800px">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div style="padding: 5px;" class="alert alert-info" role="alert">
+        {% for message in messages %}
+        <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+    <table class="table" style=" margin: 0 auto; text-align:center" id="table-info">
+        <thead>
+        <tr>
+            <th style="width: 45px; text-align:left" scope="col">№</th>
+            <th style="width: 300px;" scope="col">Смартфон</th>
+            <th style="width: 45px;" scope="col">ОС</th>
+            <th style="width: 150px;" scope="col">Год выпуска</th>
+            <th style="width: 45px;" scope="col">Диагональ</th>
+            <th style="width: 45px;" scope="col">NFC</th>
+            <th style="width: 45px;" scope="col">Оперативная память</th>
+            <th style="width: 45px;" scope="col">Встроенная память</th>
+            <th style="width: 45px;" scope="col">SIM</th>
+            <th style="width: 150px;" scope="col">Кол-во ядер</th>
+            <th style="width: 100px;" scope="col">Цена (₽)</th>
+            <th style="width: 200px;" scope="col">Редактирование</th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        {% for panel_phones in panel_phones %}
+
+        <tr style="text-align:center">
+            <th style="padding-top: 13px; text-align:left" scope="row">{{loop.index}}</th>
+            <td style="padding-top: 13px; text-align:center">{{panel_phones.brand}} {{panel_phones.model}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.OS}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.year}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.diagonal}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.NFC}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.RAM}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.memory}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.SIM}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.cores}}</td>
+            <td style="padding-top: 13px;">{{panel_phones.price}}</td>
+
+            <td style="text-align:center;">
+                <a href="/edit/{{panel_phones.id}}" style="text-decoration: None">
+                    <button style="width:40px; height: 32px; background-color: #82d649; border-color: #82d649"
+                            class="btn btn-primary">
+                        <img style="margin-top:-12px; margin-left:-8px;" src="/static/pictures/icons8-edit-32.png"
+                             width="28"
+                             height="28">
+                    </button>
+                </a>
+                <a href="/edit_color/{{panel_phones.id}}" style="text-decoration: None">
+                    <button style="width:40px; height: 32px; background-color: #82d649; border-color: #82d649"
+                            class="btn btn-primary">
+                        <img style="margin-top:-12px; margin-left:-8px;" src="/static/pictures/icons8-fill-color-30.png"
+                             width="28"
+                             height="28">
+                    </button>
+                </a>
+                <a href="/delete/{{panel_phones.id}}" style="text-decoration: None">
+                    <button style="width:40px; height: 32px; background-color: #fa464a; border-color: #fa464a"
+                            class="btn btn-primary"
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <img style="margin-top:-12px; margin-left:-8px;" src="/static/pictures/icons8-trash-32.png"
+                             width="28"
+                             height="28">
+                    </button>
+                </a>
+            </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="phone_info" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 600px; margin: 0 auto">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Редактировать данные</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body row">
+                <div class="container text-center" style="width: 250px">
+
+                    <div class="form-floating pb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="f" name='brand'
+                               value="{{panel_phones.brand}}" required/>
+                        <label for="floatingInput">Бренд</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="f" name='model'
+                               required/>
+                        <label for="floatingInput">Модель</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="f" name='OS'
+                               required/>
+                        <label for="floatingInput">ОС</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="number" class="form-control" id="floatingInput" placeholder="f" name='year'
+                               required/>
+                        <label for="floatingInput">Год выпуска</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="number" class="form-control" id="floatingInput" placeholder="f" name='price'
+                               required/>
+                        <label for="floatingInput">Цена (₽)</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="f" name='diagonal'
+                               required/>
+                        <label for="floatingInput">Диагональ</label>
+                    </div>
+
+                </div>
+                <div class="container text-center" style="width: 250px">
+
+                    <div class="form-floating pb-2">
+                        <input type="text" class="form-control" id="floatingInput" placeholder="f" name='NFC'
+                               required/>
+                        <label for="floatingInput">NFC</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="number" class="form-control" id="floatingInput" placeholder="f" name='RAM'
+                               min="2" max="512" required/>
+                        <label for="floatingInput">Оперативная память</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="number" class="form-control" id="floatingInput" placeholder="f" name='memory'
+                               min="16" max="1024" required/>
+                        <label for="floatingInput">Встроенная память</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="number" class="form-control" id="floatingInput" placeholder="f" name='SIM'
+                               min="1" max="2" required/>
+                        <label for="floatingInput">Кол-во SIM-карт</label>
+                    </div>
+                    <div class="form-floating pb-2">
+                        <input type="number" class="form-control" id="floatingInput" placeholder="f" name='cores'
+                               min="1" max="10" required/>
+                        <label for="floatingInput">Кол-во ядер</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary">Сохранить изменения</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="{{panel_phones.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Добавить цвет</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating pb-2">
+                    <input type="number" class="form-control" id="floatingInput" placeholder="f" name='memory'
+                           min="16" max="1024" required/>
+                    <label for="floatingInput">Цвет</label>
+                </div>
+                <div class="form-floating pb-2">
+                    <input type="number" class="form-control" id="floatingInput" placeholder="f" name='SIM'
+                           min="1" max="2" required/>
+                    <label for="floatingInput">Изображение</label>
+                </div>
+                <div class="form-floating pb-2">
+                    <input type="number" class="form-control" id="floatingInput" placeholder="f" name='cores'
+                           min="1" max="10" required/>
+                    <label for="floatingInput">Кол-во ядер</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+</body>
 </html>

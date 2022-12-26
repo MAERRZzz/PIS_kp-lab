@@ -1,0 +1,179 @@
+<html lang="en">
+<head style="padding-top: 20px">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Редактировать данные</title>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      .container{
+          width: 400px;
+      }
+      label{
+      color: grey
+      }
+      .cart-btn {
+          display: inline-block;
+          background-color: #0d6efd;
+          border: None;
+          border-radius: 6px;
+          font-size: 16px;
+          color: white;
+          text-decoration: none;
+          padding: 9px 17px;
+          transition: all .5s;
+          text-align: center;
+        }
+    d-block {
+        font-size: 18px;
+        border: None;
+        border-radius: 5px;
+        background-color: white;
+        transition: background 0.3s;
+    }
+    d-block:hover {
+        background-color: rgb(217, 217, 217);
+    }
+    </style>
+</head>
+{% extends "base.html" %}
+{% block body %}
+<body>
+<div class="container" style="width: 800px">
+<div class="container" style="margin: 0 auto;">
+    <div style="width: 130px; margin-left: 85%;">
+        <a href="/" style=" text-align:center"
+           class="d-block link-dark text-decoration-none text-center">Назад</a>
+    </div>
+</div>
+<h1 class="text-center h3 mb-2 fw-normal">Данные о смартфоне</h1>
+
+<div class="container text-center" >
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div style="padding: 5px;" class="alert alert-info" role="alert">
+        {% for message in messages %}
+        <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+<form action="/edit_phone" method="POST">
+    {%for phone_info in phone_info%}
+    <div class="row m-3" style="justify-content:center;">
+        <div class="container text-center" style="width: 250px">
+            <div class="form-floating pb-2">
+                <input type="text" class="form-control" id="floatingInput" placeholder="f" name='brand'
+                       value="{{phone_info.brand}}" required/>
+                <label for="floatingInput">Бренд</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="text" class="form-control" id="floatingInput" placeholder="f" name='model'
+                      value="{{phone_info.model}}" required/>
+                <label for="floatingInput">Модель</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="text" class="form-control" id="floatingInput" placeholder="f" name='OS'
+                      value="{{phone_info.OS}}" required/>
+                <label for="floatingInput">ОС</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="number" class="form-control" id="floatingInput" placeholder="f" name='year'
+                      value="{{phone_info.year}}" required/>
+                <label for="floatingInput">Год выпуска</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="number" class="form-control" id="floatingInput" placeholder="f" name='price'
+                      value="{{phone_info.price}}" required/>
+                <label for="floatingInput">Цена (₽)</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="text" class="form-control" id="floatingInput" placeholder="f" name='diagonal'
+                      value="{{phone_info.diagonal}}" required/>
+                <label for="floatingInput">Диагональ</label>
+            </div>
+
+        </div>
+        <div class="container text-center" style="width: 250px">
+
+            <div class="form-floating pb-2">
+                <input type="text" class="form-control" id="floatingInput" placeholder="f" name='NFC'
+                      value="{{phone_info.NFC}}" required/>
+                <label for="floatingInput">NFC</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="number" class="form-control" id="floatingInput" placeholder="f" name='RAM'
+                      value="{{phone_info.RAM}}" min="2" max="512" required/>
+                <label for="floatingInput">Оперативная память</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="number" class="form-control" id="floatingInput" placeholder="f" name='memory'
+                      value="{{phone_info.memory}}" min="16" max="1024" required/>
+                <label for="floatingInput">Встроенная память</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="number" class="form-control" id="floatingInput" placeholder="f" name='SIM'
+                      value="{{phone_info.SIM}}" min="1" max="2" required/>
+                <label for="floatingInput">Кол-во SIM-карт</label>
+            </div>
+            <div class="form-floating pb-2">
+                <input type="number" class="form-control" id="floatingInput" placeholder="f" name='cores'
+                      value="{{phone_info.cores}}" min="1" required/>
+                <label for="floatingInput">Кол-во ядер</label>
+            </div>
+        </div>
+    </div>
+    <div class="text-center ">
+        <input type="hidden" name="phone_id" value="{{phone_info.id}}">
+        <button class="w-25 btn btn-lg btn-primary mb-2" type="submit">Сохранить</button>
+    </div>
+    {%endfor%}
+</form>
+    </div>
+{% endblock %}
+</body>
+</html>

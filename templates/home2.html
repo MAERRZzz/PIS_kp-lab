@@ -7,17 +7,19 @@
         text-align: center;
         padding-top:100px
       }
+
     </style>
 </head>
 <body>
 {% extends "base.html" %}
 {% block body %}
-<div class="d-grid gap-3" style="grid-template-columns: 1fr 3fr; padding-left: 65px; padding-right: 65px; position: sticky; ">
-  <div class="bg-light border rounded-3" style="width: 325px; height: 550px; text-align: center">
-    <br><br>Сортировка<br><br>
-  </div>
+<div class="d-grid gap-3"
+     style="grid-template-columns: 1fr 3fr; padding-left: 65px; padding-right: 65px; position: sticky; ">
+    <div class="bg-light border rounded-3" style="width: 325px; height: 550px; text-align: center">
+        <br><br>Сортировка<br><br>
+    </div>
 
-<style>
+    <style>
         .product-item {
            max-width: 350px;
            margin: 0 auto;
@@ -31,9 +33,7 @@
         .product-img {
            transition: 0.3s ease-in-out;
         }
-        .product-img:hover {
-           transform: scale(1.03);
-        }
+
         .product-img img {
             height: 270px;
             max-width: 100%;
@@ -86,41 +86,46 @@
            font-size: 12px;
            line-height: 28px;
            transition: .3s ease-in;
-
         }
-        .button:hover {
-           background: #fc5a5a;
-           color: white;
+        .double-hover:hover .product-img{
+            transform: scale(1.03);
         }
-          </style>
+        .double-hover:hover .button{
+            background: #fc5a5a;
+            color: white;
+        }
+    </style>
 
 
-  <div class="bg-light border rounded-3 p-3">
-<!-- СПИСОК ТОВАРОВ  -->
-      <div class="row">
-          {%for phone in phone%}
-          <div class="phone_card col-6 col-sm-6 col-md-4">
-              <div class="product-item" style="text-align: center; border-radius: 10px">
-                  <div class="product-img">
-                      <a href="/details/{{phone.id}}/{{phone.color_title}}">
-                          <img src="{{phone.image}}">
-                      </a>
-                  </div>
-                  <div class="product-list">
-                      <h3>{{phone.brand}} {{phone.model}}</h3>
-                      <span class="price">₽ {{phone.price}}</span>
-                      <div class="actions">
-                          <div class="add-to-cart">
-                              <a href="/details/{{phone.id}}/{{phone.color_title}}" class="button">Подробднее</a>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          {%endfor%}
-      </div>
-  </div>
-</div>{% endblock %}
+    <div class="bg-light border rounded-3 p-3 mb-4">
+        <!-- СПИСОК ТОВАРОВ  -->
+        <div class="row">
+            {%for phone in phone%}
+            <div class="phone_card col-6 col-sm-6 col-md-4 mb-2">
+                <div class="product-item" style="text-align: center; border-radius: 10px">
+                    <div class="double-hover">
+                        <div class="product-img">
+                            <a href="/details/{{phone.id}}/{{phone.color_id}}">
+                                <img src="{{phone.image}}">
+                            </a>
+                        </div>
+                        <div class="product-list">
+                            <h3>{{phone.brand}} {{phone.model}}</h3>
+                            <span class="price">₽ {{phone.price}}</span>
+                            <div class="actions">
+                                <div class="add-to-cart">
+                                    <a href="/details/{{phone.id}}/{{phone.color_id}}" class="button">Подробднее</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+{% endblock %}
 </body>
 
 </html>

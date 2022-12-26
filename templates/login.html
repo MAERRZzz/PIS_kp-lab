@@ -83,8 +83,16 @@
 <main class="form-signin w-100 m-auto">
     <div class="container">
   <form method="post">
-    <h1 class="h3 mb-1 fw-normal">AppDroid</h1>
-      <div class="msg pt-2 pb-3">{{ msg }}</div>
+    <h1 class="h3 mb-3 fw-normal">AppDroid</h1>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="padding: 5px;" class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                    <div style="text-align:center">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+      {% endwith %}
     <div class="form-floating pb-2">
       <input type="text" class="form-control" id="floatingInput" placeholder="ivan123" name='nickname' required/>
       <label for="floatingInput">Никнейм</label>

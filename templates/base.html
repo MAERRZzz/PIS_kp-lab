@@ -7,7 +7,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
     <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/headers/">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
-    <script src="https://kit.fontawesome.com/f5d4fd731c.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script>
+    if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+    }
+</script>
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
@@ -17,7 +24,7 @@
             <div style="padding-right: 5px;">
                 <a style="margin-right: 0px; font-size: 24px;  width: 210px;" href="/"
                    class="d-block link-dark text-decoration-none">AppDroid
-                    <img style="margin-right: -35px;" src="../static/pictures/icons8-phone-64.png" width="60"
+                    <img style="margin-right: -35px;" src="/static/pictures/icons8-phone-64.png" width="60"
                          height="60">
                 </a>
             </div>
@@ -32,37 +39,61 @@
                 <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
             </form>
 
-            <div style="width: 130px; padding-right: 5px;">
-                <a style="font-size: 16px;" href="/cart" class="d-block link-dark text-decoration-none col-lg-auto">Корзина
-                    <img style="margin-right: -25px; " src="../static/pictures/icons8-shopping-cart-32.png" width="28"
-                         height="28"
-                    >
-                </a>
-            </div>
 
             {%if user_session == True %}
+            {%if not session['id']%}
             <div style="width: 130px;">
                 <a style="font-size: 16px;" href="/profile" class="d-block link-dark text-decoration-none col-lg-auto">Профиль
-                    <img style="margin-right: -25px;" src="../static/pictures/icons8-user-32.png" width="28"
+                    <img style="margin-right: -25px;" src="/static/pictures/icons8-user-32.png" width="28"
                          height="28">
                 </a>
 
                 <a style="font-size: 16px;" href="/logout" class="d-block link-dark text-decoration-none">Выйти
-                    <img style="margin-right: -25px; " src="../static/pictures/icons8-logout-32.png" width="28"
+                    <img style="margin-right: -25px; " src="/static/pictures/icons8-logout-32.png" width="28"
+                         height="28">
+                </a></div>
+            {%else%}
+            {%if session['admin'] != '1'%}
+            <div style="width: 130px; padding-right: 5px;">
+                <a style="font-size: 16px;" href="/cart" class="d-block link-dark text-decoration-none col-lg-auto">Корзина
+                    <img style="margin-right: -25px; " src="/static/pictures/icons8-shopping-cart-32.png" width="28"
                          height="28">
                 </a>
-                {%else%}
-                <div style="width: 130px;">
-                    <a style="font-size: 16px;" href="/login" class="d-block link-dark text-decoration-none">Войти
-                        <img style="margin-right:-25px" src="../static/pictures/icons8-enter-32.png" width="28"
-                             height="28" class="rounded-circle">
-                    </a>
-                </div>
-                {%endif%}
             </div>
+            <div style="width: 130px;">
+                <a style="font-size: 16px;" href="/profile" class="d-block link-dark text-decoration-none col-lg-auto">Профиль
+                    <img style="margin-right: -25px;" src="/static/pictures/icons8-user-32.png" width="28"
+                         height="28">
+                </a>
+
+                <a style="font-size: 16px;" href="/logout" class="d-block link-dark text-decoration-none">Выйти
+                    <img style="margin-right: -25px; " src="/static/pictures/icons8-logout-32.png" width="28"
+                         height="28">
+                </a></div>
+            {%else%}
+            <div style="width: 130px;">
+                <a style="font-size: 16px;" href="/profile" class="d-block link-dark text-decoration-none col-lg-auto">Профиль
+                    <img style="margin-right: -25px;" src="/static/pictures/icons8-user-32.png" width="28"
+                         height="28">
+                </a>
+
+                <a style="font-size: 16px;" href="/logout" class="d-block link-dark text-decoration-none">Выйти
+                    <img style="margin-right: -25px; " src="/static/pictures/icons8-logout-32.png" width="28"
+                         height="28">
+                </a></div>
+            {%endif%}
+            {%endif%}
+            {%else%}
+            <div style="width: 130px;">
+                <a style="font-size: 16px;" href="/login" class="d-block link-dark text-decoration-none">Войти
+                    <img style="margin-right:-25px" src="/static/pictures/icons8-enter-32.png" width="28"
+                         height="28" class="rounded-circle">
+                </a>
+            </div>
+            {%endif%}
         </div>
     </div>
 </header>
-{% block body %} {% endblock %}
+<main class="main">{% block body %} {% endblock %}</main>
 </body>
 </html>
